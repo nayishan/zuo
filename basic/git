@@ -1,0 +1,28 @@
+package main
+
+import "fmt"
+
+func printBit(a int) {
+	var b string
+	for i := 31; i >= 0; i-- {
+		if (a & (1 << i)) == 0 {
+			b = "0"
+		} else {
+			b = "1"
+		}
+		fmt.Printf("%s", b)
+	}
+	fmt.Println()
+}
+func main() {
+	a := 123123
+	printBit(a)
+	b := 123
+	printBit(b)
+	c := 2
+	printBit(c)
+	d := 5
+	printBit(d)
+	e := -5
+	printBit(e)
+}

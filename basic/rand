@@ -1,0 +1,36 @@
+package main
+
+import (
+	"fmt"
+	"math/rand"
+)
+
+//给定一个不等但是固定的概率的0~1发生器
+//利用这个函数取得一个等概率0~1发生器
+
+//不等概率0～1发生器
+func x() int {
+	m := rand.Float64()
+	if m < 0.8 {
+		return 0
+	} else {
+		return 1
+	}
+}
+
+//00 不要
+//11 不要
+//01 0 此时的概率为 p*(1-p)
+//10 1 此时的概率为(1-p)*p
+func zeroOne() int {
+	m := 0
+	for {
+		m = x()<<1 + x()
+		if m == 1 {
+			return 0
+		}
+		if m == 2 {
+			return 1
+		}
+	}
+}
