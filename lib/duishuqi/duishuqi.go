@@ -85,3 +85,27 @@ func WuXuBuDeng(maxLen int, maxValue int) []int {
 func init() {
 	fmt.Println("duishuqi init")
 }
+func GenerateRandomByte() byte {
+	rand.Seed(time.Now().UnixNano())
+	ans := rand.Intn('z'-'a'+1) + 'a'
+	return byte(ans)
+}
+
+//给定一组字符串，求该组字符串拼接后字典序最小的组合。
+func GenerateRandomString(arrayLen, stringLen int) []string {
+	rand.Seed(time.Now().UnixNano())
+	randArrayLen := rand.Intn(arrayLen)
+	ans := make([]string, randArrayLen)
+	for i := 0; i < randArrayLen; i++ {
+		randStringLen := 0
+		for randStringLen == 0 {
+			randStringLen = rand.Intn(stringLen)
+		}
+		temp := make([]byte, randStringLen)
+		for j := 0; j < randStringLen; j++ {
+			temp[j] = GenerateRandomByte()
+		}
+		ans[i] = string(temp)
+	}
+	return ans
+}
