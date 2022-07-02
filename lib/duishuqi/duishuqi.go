@@ -91,7 +91,10 @@ func GenerateRandomByte() byte {
 	return byte(ans)
 }
 
+<<<<<<< HEAD
 //给定一组字符串，求该组字符串拼接后字典序最小的组合。
+=======
+>>>>>>> b1b5096 (add generateRandomString)
 func GenerateRandomString(arrayLen, stringLen int) []string {
 	rand.Seed(time.Now().UnixNano())
 	randArrayLen := rand.Intn(arrayLen)
@@ -109,3 +112,47 @@ func GenerateRandomString(arrayLen, stringLen int) []string {
 	}
 	return ans
 }
+<<<<<<< HEAD
+=======
+
+func GenerateRandomSortedMember(members, memberRoot, memberCeil int) []int {
+	ans := make([]int, members)
+	rest := members
+	max := memberRoot
+	temp := memberRoot
+	for i := 0; i < members; i++ {
+		sorted := true
+		for {
+			rand.Seed(time.Now().UnixNano())
+			temp = rand.Intn(memberCeil-rest+1-max) + max
+			for j := 0; j < i; j++ {
+				if temp < ans[j] {
+					sorted = false
+				} else if temp == ans[j] {
+					temp = temp + 1
+				}
+			}
+			if sorted {
+				ans[i] = temp
+				break
+			}
+		}
+		if max < temp {
+			max = temp
+		}
+		rest--
+	}
+	return ans
+}
+
+func GenerateRandomArrayMemberSorted(members int, arrayLen int, memberRoot int, memberCeil int) [][]int {
+	rand.Seed(time.Now().UnixNano())
+	randArrayLen := rand.Intn(arrayLen)
+	ans := make([][]int, randArrayLen)
+	for i := 0; i < randArrayLen; i++ {
+		temp := GenerateRandomSortedMember(members, memberRoot, memberCeil)
+		ans[i] = temp
+	}
+	return ans
+}
+>>>>>>> b1b5096 (add generateRandomString)

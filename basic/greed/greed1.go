@@ -56,7 +56,13 @@ func removeIndex(array []string, index int) []string {
 			addOne = true
 		}
 		if addOne {
+<<<<<<< HEAD
 			ans[i] = array[i+1]
+=======
+			if i+1 < len(array) {
+				ans[i] = array[i+1]
+			}
+>>>>>>> b1b5096 (add generateRandomString)
 		} else {
 			ans[i] = array[i]
 		}
@@ -69,8 +75,14 @@ func processLD1(array []string) []string {
 	ans := make([]string, 0)
 	if len(array) == 0 {
 		//如果不是空字符的话，那么最底层的ans将无法做append，导致所有的
+<<<<<<< HEAD
 		//上层都无法append
 		ans = append(ans, "")
+=======
+		//上层都无法append,加入“”之后len是1
+		ans = append(ans, "")
+		// fmt.Println(len(ans))
+>>>>>>> b1b5096 (add generateRandomString)
 		return ans
 	}
 	for i := range array {
