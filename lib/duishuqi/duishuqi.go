@@ -91,10 +91,7 @@ func GenerateRandomByte() byte {
 	return byte(ans)
 }
 
-<<<<<<< HEAD
 //给定一组字符串，求该组字符串拼接后字典序最小的组合。
-=======
->>>>>>> b1b5096 (add generateRandomString)
 func GenerateRandomString(arrayLen, stringLen int) []string {
 	rand.Seed(time.Now().UnixNano())
 	randArrayLen := rand.Intn(arrayLen)
@@ -112,8 +109,6 @@ func GenerateRandomString(arrayLen, stringLen int) []string {
 	}
 	return ans
 }
-<<<<<<< HEAD
-=======
 
 func GenerateRandomSortedMember(members, memberRoot, memberCeil int) []int {
 	ans := make([]int, members)
@@ -155,4 +150,3 @@ func GenerateRandomArrayMemberSorted(members int, arrayLen int, memberRoot int, 
 	}
 	return ans
 }
->>>>>>> b1b5096 (add generateRandomString)
