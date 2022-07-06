@@ -1,0 +1,35 @@
+package unionsetarray
+
+import "fmt"
+
+func init() {
+	fmt.Println("unionsetarray start")
+}
+
+type Node struct {
+	v interface{}
+}
+
+type UnionSet struct {
+	Nodes  []Node
+	Parent []Node
+	Size   []int
+}
+
+func Init(a []interface{}) *UnionSet {
+	var u UnionSet
+	N := len(a)
+	u.Nodes = make([]Node, N)
+	u.Parent = make([]Node, N)
+	u.Size = make([]int, N)
+	for i := 0; i < N; i++ {
+		u.Nodes[i] = Node{a[i]}
+		u.Parent[i] = Node{a[i]}
+		u.Size[i] = 1
+	}
+	return &u
+}
+
+func (u *UnionSet) FindFather(a interface{}) Node {
+
+}
