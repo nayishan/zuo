@@ -83,10 +83,12 @@ func (u *UnionSet) Union(a, b interface{}) {
 func (u *UnionSet) FindFather(a interface{}) interface{} {
 	nodeA := Node{a}
 	stack := make([]Node, 0)
+	stack = append(stack, nodeA)
 	for nodeA != u.Parents[nodeA] {
-		stack = append(stack, nodeA)
 		nodeA = u.Parents[nodeA]
+		stack = append(stack, nodeA)
 	}
+	//这里是优化，目标是把路径的所有节点指alpha
 	for i := len(stack) - 1; i >= 0; i-- {
 		u.Parents[stack[i]] = nodeA
 	}
