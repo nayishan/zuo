@@ -4,100 +4,184 @@ import (
 	"fmt"
 )
 
-// ListNode
-type ListNode struct {
-	Val  int
-	Next *ListNode // 表示指向下一个结点
+type Fifo_Interface interface {
+	Acl_push_back(data interface{})
+	Acl_push_front(data interface{})
+	Acl_pop_back() (interface{}, error)
+	Acl_pop_front() (interface{}, error)
+	Acl_head() (interface{}, error)
+	Acl_tail() (interface{}, error)
+	Acl_index(index int) (interface{}, error)
 }
 
-func InitListNode() ListNode {
-	head := ListNode{
-		Val:  -1,
-		Next: nil,
-	}
-	return head
+type acl_fifo_info struct {
+	data interface{}
+	prev *acl_fifo_info
+	next *acl_fifo_info
 }
 
-// 第一种插入方法：给链表插入一个结点，在单链表的最后加入，该方法简单
-func InsertListNode(head *ListNode, newNode *ListNode) {
-	// 1 先找到该链表的最后这个结点。
-	// 2 创建一个辅助结点。
-	temp := head
-	for temp.Next != nil {
-
-		temp = temp.Next // 让 temp 不断的指向下一个结点
-	}
-	// 3 将 newHeroNode 加入到链表的最后
-	temp.Next = newNode
-}
-
-// 第二种插入方法：给链表插入一个结点，根据 no 的编号从小到大插入，该方法实用
-func InsertListNode2(head *ListNode, newNode *ListNode) {
-	// 1 找到适当的结点。
-	// 2 创建一个辅助结点。
-	temp := head
-	flag := true
-	// 让插入的结点的 no，和 temp 的下一个结点的 no 比较
-	for {
-		if temp.Next == nil { // 说明到链表的最后
-			break
-		} else if temp.Next.Val >= newNode.Val {
-			// 说明 newHeroNode 就应该插入到 temp 后面
-			break
-		} else if temp.Next.Val == newNode.Val {
-			// 链表中已经有这个 no,不用插入.
-			flag = false
-			break
-		}
-		temp = temp.Next
-	}
-	if !flag {
-		fmt.Println("对不起，已经存在no=", newNode.Val)
-		return
-	} else {
-		newNode.Next = temp.Next
-		temp.Next = newNode
+func acl_fifo_info_new(data interface{}) *acl_fifo_info {
+	return &acl_fifo_info{
+		data: data,
+		prev: nil,
+		next: nil,
 	}
 }
 
-// 删除一个结点
-func DelListNode(head *ListNode, id int) {
-	temp := head
-	flag := false
-	// 找到要删除结点的 no，和 temp 的下一个结点的 no 比较
-	for {
-		if temp.Next == nil { // 说明到链表的最后
-			break
-		} else if temp.Next.Val == id {
-			// 找到了
-			flag = true
-			break
-		}
-		temp = temp.Next
-	}
-	if flag { // 找到,删除
-		temp.Next = temp.Next.Next
-	} else {
-		fmt.Println("sorry, 要删除的id不存在")
+type Acl_fifo struct {
+	head *acl_fifo_info
+	tail *acl_fifo_info
+	cnt  int
+}
+
+func Acl_fifo_new() *Acl_fifo {
+	return &Acl_fifo{
+		head: nil,
+		tail: nil,
+		cnt:  0,
 	}
 }
 
-// 显示链表的所有结点信息
-func PrintListNode(head *ListNode) {
-	// 创建一个辅助结点
-	temp := head
-	// 先判断该链表是不是一个空的链表
-	if temp.Next == nil {
-		fmt.Println("空空如也。。。。")
+func (fifo *Acl_fifo) Acl_push_back(data interface{}) {
+	info := acl_fifo_info_new(data)
+	if info == nil {
 		return
 	}
-	// 遍历这个链表
-	for {
-		fmt.Printf("[%d ]==>", temp.Next.Val)
-		temp = temp.Next
-		if temp.Next == nil {
+
+	if fifo.tail == nil {
+		fifo.head = info
+		fifo.tail = info
+		info.prev = nil
+		info.next = nil
+	} else {
+		fifo.tail.next = info
+		info.prev = fifo.tail
+		info.next = nil
+		fifo.tail = info
+	}
+
+	fifo.cnt++
+
+}
+func (fifo *Acl_fifo) Acl_push_front(data interface{}) {
+	info := acl_fifo_info_new(data)
+	if info == nil {
+		return
+	}
+
+	if fifo.head == nil {
+		fifo.head = info
+		fifo.tail = info
+		info.prev = nil
+		info.next = nil
+	} else {
+		info.next = fifo.head
+		fifo.head.prev = info
+		info.prev = nil
+		fifo.head = info
+	}
+
+	fifo.cnt++
+}
+func (fifo *Acl_fifo) Acl_pop_back() interface{} {
+
+	info := fifo.tail
+	if fifo.tail.prev == nil {
+		fifo.tail = nil
+		fifo.head = nil
+	} else {
+		fifo.tail.prev.next = nil
+		fifo.tail = fifo.tail.prev
+	}
+
+	fifo.cnt--
+
+	return info.data
+}
+func (fifo *Acl_fifo) Acl_pop_front() interface{} {
+
+	info := fifo.head
+	if fifo.head.next == nil {
+		fifo.head = nil
+		fifo.tail = nil
+	} else {
+		fifo.head.next.prev = nil
+		fifo.head = fifo.head.next
+	}
+
+	fifo.cnt--
+
+	return info.data
+}
+func (fifo *Acl_fifo) Acl_size() int {
+	return fifo.cnt
+}
+func (fifo *Acl_fifo) Acl_index(index int) (interface{}, error) {
+	if index < 0 || index > fifo.cnt-1 {
+		return nil, fmt.Errorf("index out of range")
+	}
+
+	info := fifo.head
+	for i := 0; i < fifo.cnt; i++ {
+		if i == index {
 			break
 		}
+		info = info.next
 	}
-	fmt.Println()
+
+	return info.data, nil
 }
+
+func (fifo *Acl_fifo) Acl_head() interface{} {
+	return fifo.head.data
+}
+func (fifo *Acl_fifo) Acl_tail() interface{} {
+	return fifo.tail.data
+}
+
+// func main() {
+// 	var size int
+// 	var fifo *Acl_fifo
+//
+// 	fifo = Acl_fifo_new()
+//
+// 	size = fifo.acl_size()
+// 	fmt.Print(size, " should be [0]\n")
+//
+// 	fmt.Printf("\n----------push_back[pop_back]-------------------\n")
+// 	for i := 0; i < 10; i++ {
+// 		fifo.acl_push_back(i)
+// 		fmt.Printf("%d\t", i)
+// 	}
+// 	fmt.Println()
+//
+// 	head, _ := fifo.acl_head()
+// 	tail, _ := fifo.acl_tail()
+// 	fmt.Println(head.(int), tail.(int))
+//
+// 	size = fifo.acl_size()
+// 	for i := 0; i < size; i++ {
+// 		info, _ := fifo.acl_pop_back()
+// 		fmt.Printf("%d\t", info.(int))
+// 	}
+//
+// 	fmt.Printf("\n----------push_back[pop_front]-------------------\n")
+//
+// 	for i := 0; i < 10; i++ {
+// 		fifo.acl_push_back(i)
+// 		fmt.Printf("%d\t", i)
+// 	}
+// 	fmt.Println()
+//
+// 	head, _ = fifo.acl_head()
+// 	tail, _ = fifo.acl_tail()
+// 	fmt.Println(head.(int), tail.(int))
+//
+// 	size = fifo.acl_size()
+// 	for i := 0; i < size; i++ {
+// 		info, _ := fifo.acl_pop_front()
+// 		fmt.Printf("%d\t", info.(int))
+// 	}
+// 	fmt.Printf("\n-----------------------------\n")
+//
+// }
