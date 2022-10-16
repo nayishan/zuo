@@ -1,9 +1,5 @@
 package linklist
 
-import (
-	"fmt"
-)
-
 type Fifo_Interface interface {
 	Acl_push_back(data interface{})
 	Acl_push_front(data interface{})
@@ -116,10 +112,7 @@ func (fifo *Acl_fifo) Acl_pop_front() interface{} {
 func (fifo *Acl_fifo) Acl_size() int {
 	return fifo.cnt
 }
-func (fifo *Acl_fifo) Acl_index(index int) (interface{}, error) {
-	if index < 0 || index > fifo.cnt-1 {
-		return nil, fmt.Errorf("index out of range")
-	}
+func (fifo *Acl_fifo) Acl_index(index int) interface{} {
 
 	info := fifo.head
 	for i := 0; i < fifo.cnt; i++ {
@@ -129,7 +122,7 @@ func (fifo *Acl_fifo) Acl_index(index int) (interface{}, error) {
 		info = info.next
 	}
 
-	return info.data, nil
+	return info.data
 }
 
 func (fifo *Acl_fifo) Acl_head() interface{} {

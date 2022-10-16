@@ -1,32 +1,38 @@
 package stack
 
-import "fmt"
+// import "fmt"
 
-var stack []int
+type stack []interface{}
 
-func init() {
-	stack = make([]int, 0)
-	fmt.Println("init stack,len", len(stack), "cap", cap(stack))
+// func init() stack {
+// 	temp := make([]int, 0)
+// 	fmt.Println("init stack")
+// 	return temp
+// }
+func StackNew() *stack {
+	temp := make(stack, 0)
+	return &temp
+
 }
 
 //Push pop Looukup Size isEmpry
 
-func Push(val int) {
-	stack = append(stack, val)
+func (s *stack) Push(val interface{}) {
+	*s = append(*s, val)
+}
+func (s *stack) Peek() interface{} {
+	return (*s)[s.Size()-1]
 }
 
-func Pop() (int, bool) {
-	N := len(stack)
-	if N == 0 {
-		return 0, false
-	}
-	ans := stack[N-1]
-	stack = stack[:N-1]
-	return ans, true
+func (s *stack) Pop() interface{} {
+	N := len(*s)
+	ans := (*s)[N-1]
+	*s = (*s)[:N-1]
+	return ans
 }
 
-func IsEmpty() bool {
-	N := len(stack)
+func (s *stack) IsEmpty() bool {
+	N := len(*s)
 	if N == 0 {
 		return true
 	} else {
@@ -34,6 +40,6 @@ func IsEmpty() bool {
 	}
 }
 
-func Size() int {
-	return len(stack)
+func (s *stack) Size() int {
+	return len(*s)
 }
